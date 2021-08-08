@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Nav from '../../Component/Nav';
 import { perpusContext } from '../../Context/context';
@@ -11,7 +10,6 @@ function Petugas(props) {
   const [nama, setNama] = useState('');
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
-  const history = useHistory();
 
   const handleSubmit = (e) => {
     setErrors({});
@@ -23,16 +21,15 @@ function Petugas(props) {
         email,
       })
       .then((res) => {
-        let nama = document.querySelector('#nama');
-        let email = document.querySelector('#email');
-
-        nama.value('');
-        email.value('');
+        // let nama = document.querySelector('#nama');
+        // let email = document.querySelector('#email');
+        // nama.value('');
+        // email.value('');
       })
       .catch((err) => {
-        if (err.response.status === 400) {
+        if (err.response.status === 400 && err.response.status != undefined) {
           setErrors(err.response.data.error);
-        } else if (err.response.status === 403) {
+        } else if (err.response.status === 403 && err.response.status != undefined) {
           return Swal.fire({
             icon: 'error',
             title: 'Tambah Data Gagal',

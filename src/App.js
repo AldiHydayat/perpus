@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './Functional/Home/Home';
+import Buku from './Functional/Buku/Buku';
+import EditBuku from './Functional/Buku/EditBuku';
+import Anggota from './Functional/Anggota/Anggota';
+import EditAnggota from './Functional/Anggota/EditAnggota';
+import Petugas from './Functional/Petugas/Petugas';
+import Peminjaman from './Functional/Peminjaman/Peminjaman';
+import { Perpusprovider } from './Context/context';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Perpusprovider>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/buku" component={Buku} />
+          <Route exact path="/buku/edit" component={EditBuku} />
+          <Route exact path="/anggota" component={Anggota} />
+          <Route exact path="/anggota/edit" component={EditAnggota} />
+          <Route exact path="/petugas" component={Petugas} />
+          <Route exact path="/peminjaman" component={Peminjaman} />
+        </Switch>
+      </Router>
+    </Perpusprovider>
   );
 }
 

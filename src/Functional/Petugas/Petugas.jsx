@@ -10,6 +10,7 @@ function Petugas(props) {
   const [nama, setNama] = useState('');
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
+  const [reload, setReload] = useState(false); // Trigger untuk refresh data
 
   const handleSubmit = (e) => {
     setErrors({});
@@ -25,6 +26,7 @@ function Petugas(props) {
         // let email = document.querySelector('#email');
         // nama.value('');
         // email.value('');
+        setReload(prev => !prev)
       })
       .catch((err) => {
         if (err.response.status === 400 && err.response.status != undefined) {
@@ -51,7 +53,8 @@ function Petugas(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${url}/petugas/${id}`).then((res) => {
-          return Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          return setReload(prev => !prev)
         });
       }
     });
@@ -61,7 +64,7 @@ function Petugas(props) {
     axios.get(`${url}/petugas`).then((res) => {
       setDataPetugas([...res.data.data]);
     });
-  });
+  }, [reload]);
 
   return (
     <div>

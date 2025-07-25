@@ -14,6 +14,7 @@ function Peminjaman(props) {
   const [buku, setBuku] = useState('');
   const [jumlah, setJumlah] = useState('');
   const [errors, setErrors] = useState({});
+  const [reload, setReload] = useState(false); // Trigger untuk refresh data
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -26,7 +27,7 @@ function Peminjaman(props) {
         idBuku: buku,
         jumlah,
       })
-      .then((res) => {})
+      .then((res) => { setReload(prev => !prev) })
       .catch((err) => {
         console.dir(err);
 
@@ -54,7 +55,8 @@ function Peminjaman(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.put(`${url}/petugas/pinjam/${id}`).then((res) => {
-          return Swal.fire('Sukses!', 'buku telah dikembalikan.', 'success');
+          Swal.fire('Sukses!', 'buku telah dikembalikan.', 'success');
+          setReload(prev => !prev);
         });
       }
     });
@@ -64,19 +66,19 @@ function Peminjaman(props) {
     axios.get(`${url}/petugas/anggota`).then((res) => {
       setDataAnggota([...res.data.data]);
     });
-  }, []);
+  }, [reload]);
 
   useEffect(() => {
     axios.get(`${url}/petugas/buku`).then((res) => {
       setDataBuku([...res.data.data]);
     });
-  }, []);
+  }, [reload]);
 
   useEffect(() => {
     axios.get(`${url}/petugas/pinjam`).then((res) => {
       setDataPinjam([...res.data.data]);
     });
-  });
+  }, [reload]);
 
   return (
     <div>

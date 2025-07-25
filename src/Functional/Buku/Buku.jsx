@@ -14,6 +14,7 @@ function Buku(props) {
   const [stok, setStok] = useState('');
   const [cover, setCover] = useState(null);
   const [errors, setErrors] = useState({});
+  const [reload, setReload] = useState(false); // Trigger untuk refresh data  
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -33,7 +34,7 @@ function Buku(props) {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then((res) => {})
+      .then((res) => { setReload(prev => !prev) })
       .catch((err) => {
         if (err.response.status === 400) {
           setErrors(err.response.data.error);
@@ -53,7 +54,8 @@ function Buku(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${url}/petugas/buku/${id}`).then((res) => {
-          return Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          setReload(prev => !prev);
         });
       }
     });
@@ -64,7 +66,7 @@ function Buku(props) {
       const result = res.data.data;
       setDataBuku(result);
     });
-  });
+  }, [reload]);
 
   return (
     <div>

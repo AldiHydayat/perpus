@@ -12,6 +12,7 @@ function Anggota(props) {
   const [email, setEmail] = useState('');
   const [alamat, setAlamat] = useState('');
   const [errors, setErrors] = useState({});
+  const [reload, setReload] = useState(false); // Trigger untuk refresh data
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -29,9 +30,10 @@ function Anggota(props) {
         let email = document.querySelector('#email');
         let alamat = document.querySelector('#alamat');
 
-        nama.value('');
-        email.value('');
-        alamat.value('');
+        nama.value = '';
+        email.value = '';
+        alamat.value = '';
+        setReload(prev => !prev);
       })
       .catch((err) => {
         if (err.response.status === 400) {
@@ -58,7 +60,8 @@ function Anggota(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${url}/petugas/anggota/${id}`).then((res) => {
-          return Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          setReload(prev => !prev);
         });
       }
     });
@@ -68,7 +71,7 @@ function Anggota(props) {
     axios.get(`${url}/petugas/anggota`).then((res) => {
       setDataAnggota([...res.data.data]);
     });
-  });
+  }, [reload]);
 
   return (
     <div>
